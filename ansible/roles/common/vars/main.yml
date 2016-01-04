@@ -1,0 +1,3 @@
+mongodb_url: mongodb://localhost/theoreticalcoding
+cookie_secret: sample
+project_name: theoreticalcoding

@@ -1,0 +1,49 @@
+---
+  - hosts: all
+    tasks:
+      - name: Install git && easy_install
+        apt:
+          name: "{{ item }}"
+          state: present
+        with_items:
+          - git
+          - python-setuptools
+          - curl
+        register: task
+        sudo: yes
+
+      - name: Install pip
+        easy_install: name=pip
+        sudo: yes
+
+      - name: Install Docker
+        shell: curl -sSL https://get.docker.com/ | sh
+        args:
+          creates: /usr/bin/docker
+        sudo: yes
+
+      - name: Install docker-py
+        pip:
+          name: "{{item}}"
+        with_items:
+          - httplib2
+          - docker-py
+        sudo: yes
+
+      - name: Upload node-docker dev image
+        synchronize: src=node-docker dest=/home/vagrant
+     
+      - name: Create directory to store code
+        file:
+	  path: /home/code/theoreticalcoding/branches/dev
+	  state: directory
+	  mode: 0755
+
+      - name: Upload theoreticalcoding code files
+        synchronize: src=blog dest=/home/code/theoreticalcoding/branches/dev
+
+      - name: Build Docker image for Theoretical Coding site
+
+      - name: Start Site container
+
+      - name: Start MongoDB Container 
