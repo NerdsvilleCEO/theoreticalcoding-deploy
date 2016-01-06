@@ -1,5 +1,7 @@
 ---
   - hosts: all
+    vars:
+      mongodb_password: "changeme"
     tasks:
       - name: Install git && easy_install
         apt:
@@ -32,18 +34,36 @@
 
       - name: Upload node-docker dev image
         synchronize: src=node-docker dest=/home/vagrant
-     
+
       - name: Create directory to store code
         file:
-	  path: /home/code/theoreticalcoding/branches/dev
-	  state: directory
-	  mode: 0755
+      	  path: /home/code/theoreticalcoding/branches/dev
+      	  state: directory
+      	  mode: 0755
 
       - name: Upload theoreticalcoding code files
         synchronize: src=blog dest=/home/code/theoreticalcoding/branches/dev
 
       - name: Build Docker image for Theoretical Coding site
+        docker_image:
+          path: /home/vagrant/node-docker
+          name: theoreticalcoding/node-docker
+          state: present
+
+      - name: Start MongoDB Container
+        docker:
+          name: MongoDB
+          image: tutum/mongodb
+          ports:
+            - 27017
+          env:
+            MONGODB_PASS:{{ mongodb_password }}
+          state: started
 
       - name: Start Site container
-
-      - name: Start MongoDB Container 
+        docker:
+          name: theoreticalcoding-node
+          image: theoreticalcoding/node-docker
+          link:
+            - "MongoDB"
+          state: started
