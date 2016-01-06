@@ -10,13 +10,21 @@ Vagrant.configure(2) do |config|
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
   config.vm.hostname = "theoreticalcoding-dev"
-  
+
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "hashicorp/precise64"
 
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "ansible/ansible-provision.yml"
+  end
+
+
+  config.vm.provider "virtualbox" do |vb|
+     # Display the VirtualBox GUI when booting the machine
+     vb.gui = true
+     # Customize the amount of memory on the VM:
+     vb.memory = "512"
   end
 
   # Disable automatic box update checking. If you disable this, then
