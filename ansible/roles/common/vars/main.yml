@@ -1,3 +1,5 @@
-mongodb_url: mongodb://localhost/theoreticalcoding
+mongodb_password: "changeme"
+mongo_host: "MongoDB"
+mongodb_url: mongodb://admin:{{mongodb_password}}@{{mongo_host}}/theoreticalcoding
 cookie_secret: sample
 project_name: theoreticalcoding
